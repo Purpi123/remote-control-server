@@ -1,6 +1,9 @@
 from flask import Flask, request
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 current_command = ""
 
 @app.route('/send-command', methods=['POST'])
