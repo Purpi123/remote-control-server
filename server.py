@@ -31,11 +31,17 @@ def get_clients():
 
 @app.route('/send-command', methods=['POST'])
 def send_command():
-    cmd = request.form.get('cmd', '')
-    client_id = request.form.get('client_id')
+    data = request.get_json()
+    if not data:
+        return "Missing JSON", 400
+
+    cmd = data.get('cmd', '')
+    client_id = data.get('client_id')
     if client_id:
         commands[client_id] = cmd
-    return "OK"
+        return "OK"
+    return "Missing client_id", 400
+
 
 @app.route('/get-command', methods=['GET'])
 def get_command():
