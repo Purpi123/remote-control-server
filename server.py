@@ -47,8 +47,10 @@ def send_command():
 def get_command():
     client_id = request.args.get('client_id')
     if client_id and client_id in commands:
-        return commands[client_id]
+        cmd = commands.pop(client_id)  # Ta bort kommandot när det hämtas
+        return cmd
     return ''
+
 
 # Här lägger vi till health endpoint
 @app.route('/health', methods=['GET'])
