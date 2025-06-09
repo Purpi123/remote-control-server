@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS # Import CORS
 import time # Import time for last_seen timestamp
 
 app = Flask(__name__)
+CORS(app) # Enable CORS for all origins
 client_commands = {}
 connected_clients = {} # New dictionary to store connected clients
 
