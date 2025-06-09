@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS # Import CORS
 from flask_socketio import SocketIO, emit # Import SocketIO
 import time # Import time for last_seen timestamp
+import eventlet # Import eventlet
+eventlet.monkey_patch() # Must be called before other imports that use standard library
 
 app = Flask(__name__)
 CORS(app) # Enable CORS for all origins
