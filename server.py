@@ -30,7 +30,7 @@ def heartbeat():
             "memory_total": system_info.get('memory_total'),
             "memory_used": system_info.get('memory_used'),
             "memory_percent": system_info.get('memory_percent'),
-            "disk_info": system_info.get('disk_info', []) # Get disk_info, default to empty list
+            "disks": system_info.get('disks', []) # Get disks, default to empty list
         }
         print(f"Heartbeat from {client_id} (IP: {ip}). CPU: {system_info.get('cpu')}%. Memory: {system_info.get('memory_percent')}%. Clients online: {len(connected_clients)}")
     return jsonify({"status": "ok"})
