@@ -30,9 +30,10 @@ def heartbeat():
             "memory_total": system_info.get('memory_total'),
             "memory_used": system_info.get('memory_used'),
             "memory_percent": system_info.get('memory_percent'),
-            "disks": system_info.get('disks', []) # Get disks, default to empty list
+            "disks": system_info.get('disks', []),
+            "uptime": system_info.get('uptime') # Get uptime
         }
-        print(f"Heartbeat from {client_id} (IP: {ip}). CPU: {system_info.get('cpu')}%. Memory: {system_info.get('memory_percent')}%. Clients online: {len(connected_clients)}")
+        print(f"Heartbeat from {client_id} (IP: {ip}). CPU: {system_info.get('cpu')}%. Memory: {system_info.get('memory_percent')}%. Uptime: {system_info.get('uptime')}. Clients online: {len(connected_clients)}")
     return jsonify({"status": "ok"})
 
 @app.route('/send-command', methods=['POST'])
