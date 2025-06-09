@@ -33,10 +33,11 @@ def send_command():
     title = data.get("title", "")
     message = data.get("message", "")
     icon = data.get("icon", "") # Get icon, default empty string
+    buttons = data.get("buttons", "") # Get buttons, default empty string
 
     if client_id and cmd:
-        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon}
-        print(f"Command '{cmd}' for client {client_id} (Title: '{title}', Message: '{message}', Icon: '{icon}') received.")
+        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons}
+        print(f"Command '{cmd}' for client {client_id} (Title: '{title}', Message: '{message}', Icon: '{icon}', Buttons: '{buttons}') received.")
         return jsonify({"status": "success", "message": "Command received"}), 200
     print(f"Invalid command data received: {data}")
     return jsonify({"status": "error", "message": "Invalid command data"}), 400
@@ -45,12 +46,12 @@ def send_command():
 def get_command():
     client_id = request.args.get('client_id')
     if client_id in client_commands:
-        command_data = client_commands.pop(client_id) # Get and remove the command
+        command_data = client_commands.pop(client_id)
         print(f"Sending command '{command_data.get('cmd')}' to client {client_id}")
         return jsonify(command_data)
     
     print(f"No command for client {client_id}")
-    return jsonify({"cmd": "", "title": "", "message": "", "icon": ""}) # Return empty JSON if no command
+    return jsonify({"cmd": "", "title": "", "message": "", "icon": "", "buttons": ""}) # Return empty JSON if no command
 
 @app.route('/get-clients')
 def get_clients():
