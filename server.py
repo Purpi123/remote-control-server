@@ -137,4 +137,7 @@ def handle_stream_frame(data):
         print("Received incomplete stream frame data.")
 
 if __name__ == '__main__':
-    socketio.run(app, host="0.0.0.0", port=5000, allow_unsafe_werkzeug=True)
+    # In production, use gunicorn with eventlet/gevent
+    # For local development, you can still run it via 'python server.py'
+    # The socketio.run() call is removed for Render deployment as Render will use gunicorn.
+    pass
