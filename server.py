@@ -7,6 +7,10 @@ CORS(app) # Enable CORS for all origins
 client_commands = {}
 connected_clients = {} # New dictionary to store connected clients
 
+@app.route('/health')
+def health_check():
+    return jsonify({"status": "ok"})
+
 @app.route('/heartbeat', methods=['POST'])
 def heartbeat():
     data = request.form # Heartbeat sends form data
