@@ -22,8 +22,16 @@ def heartbeat():
     system_info = data.get('system_info', {}) # Get system_info, default to empty dict
     
     if client_id:
-        connected_clients[client_id] = {"ip": ip, "status": "online", "last_seen": time.time(), "cpu": system_info.get('cpu')}
-        print(f"Heartbeat from {client_id} (IP: {ip}). CPU: {system_info.get('cpu')}%. Clients online: {len(connected_clients)}")
+        connected_clients[client_id] = {
+            "ip": ip,
+            "status": "online",
+            "last_seen": time.time(),
+            "cpu": system_info.get('cpu'),
+            "memory_total": system_info.get('memory_total'),
+            "memory_used": system_info.get('memory_used'),
+            "memory_percent": system_info.get('memory_percent')
+        }
+        print(f"Heartbeat from {client_id} (IP: {ip}). CPU: {system_info.get('cpu')}%. Memory: {system_info.get('memory_percent')}%. Clients online: {len(connected_clients)}")
     return jsonify({"status": "ok"})
 
 @app.route('/send-command', methods=['POST'])
