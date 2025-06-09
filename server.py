@@ -7,6 +7,9 @@ CORS(app) # Enable CORS for all origins
 client_commands = {}
 connected_clients = {} # New dictionary to store connected clients
 
+# Configuration
+CLIENT_OFFLINE_THRESHOLD = 15 # seconds
+
 @app.route('/health')
 def health_check():
     return jsonify({"status": "ok"})
@@ -50,9 +53,24 @@ def get_command():
 
 @app.route('/get-clients')
 def get_clients():
-    # In a real app, you might want to filter out old/disconnected clients here
-    # For now, return all clients that have sent a heartbeat recently
-    print(f"Returning {len(connected_clients)} connected clients.")
+    current_time = time.time()
+    clients_to_remove = []
+
+    # Check for offline clients
+    for client_id, client_info in list(connected_clients.items()): # Use list() to iterate over a copy
+        if current_time - client_info["last_seen"] > CLIENT_OFFLINE_THRESHOLD:
+            if client_info["status"] != "offline":
+                print(f"Client {client_id} marked as OFFLINE.")
+            connected_clients[client_id]["status"] = "offline"
+        
+        # Optional: Remove clients that have been offline for a longer period (e.g., 5 minutes)
+        # if client_info["status"] == "offline" and (current_time - client_info["last_seen"]) > (CLIENT_OFFLINE_THRESHOLD * 20):
+        #     clients_to_remove.append(client_id)
+
+    # for client_id in clients_to_remove:
+    #     del connected_clients[client_id]
+
+    print(f"Returning {len(connected_clients)} connected clients (after offline check).")
     return jsonify(connected_clients)
 
 if __name__ == '__main__':
