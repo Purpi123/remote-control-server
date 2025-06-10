@@ -53,10 +53,11 @@ def send_command():
     topmost = data.get("topmost", False) # Get topmost, default False
     monitor_index = data.get("monitor_index", 1) # Get monitor_index, default to 1
     image = data.get("image", None) # Get image, default to None
+    pid = data.get("pid", None) # Get pid, default to None
 
     if client_id and cmd:
         # Store all relevant command data including monitor_index and image
-        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons, "topmost": topmost, "monitor_index": monitor_index, "image": image}
+        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons, "topmost": topmost, "monitor_index": monitor_index, "image": image, "pid": pid}
         print(f"Command '{cmd}' for client {client_id} (Title: '{title}', Message: '{message}', Icon: '{icon}', Buttons: '{buttons}', Top Most: {topmost}, Monitor Index: {monitor_index}, Image: {image is not None}) received.")
         return jsonify({"status": "success", "message": "Command received"}), 200
     print(f"Invalid command data received: {data}")
