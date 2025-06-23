@@ -77,8 +77,11 @@ def send_command():
 
     if client_id and cmd:
         # Store all relevant command data including monitor_index and image
-        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons, "topmost": topmost, "monitor_index": monitor_index, "image": image, "pid": pid, "image_type": image_type, "filters": filters, "actions": actions, "hide": hide}
-        print(f"Command '{cmd}' for client {client_id} (Hide: {hide}) received.")
+        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons, "topmost": topmost, "monitor_index": monitor_index, "image": image, "pid": pid, "image_type": image_type, "filters": filters, "actions": actions, "hide": hide, "url": data.get("url", None)}
+        if cmd == "open_url":
+            print(f"[SERVER] open_url command for {client_id}: {data.get('url')}")
+        else:
+            print(f"Command '{cmd}' for client {client_id} (Hide: {hide}) received.")
         return jsonify({"status": "success", "message": "Command received"}), 200
     print(f"Invalid command data received: {data}")
     return jsonify({"status": "error", "message": "Invalid command data"}), 400
