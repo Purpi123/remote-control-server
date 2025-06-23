@@ -76,10 +76,11 @@ def send_command():
     hide = data.get("hide", None) # Get taskbar hide status
 
     if client_id and cmd:
-        # Store all relevant command data including monitor_index and image
-        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons, "topmost": topmost, "monitor_index": monitor_index, "image": image, "pid": pid, "image_type": image_type, "filters": filters, "actions": actions, "hide": hide, "url": data.get("url", None)}
+        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons, "topmost": topmost, "monitor_index": monitor_index, "image": image, "pid": pid, "image_type": image_type, "filters": filters, "actions": actions, "hide": hide, "url": data.get("url", None), "process": data.get("process", None)}
         if cmd == "open_url":
             print(f"[SERVER] open_url command for {client_id}: {data.get('url')}")
+        elif cmd == "open_process":
+            print(f"[SERVER] open_process command for {client_id}: {data.get('process')}")
         else:
             print(f"Command '{cmd}' for client {client_id} (Hide: {hide}) received.")
         return jsonify({"status": "success", "message": "Command received"}), 200
