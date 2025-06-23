@@ -74,9 +74,10 @@ def send_command():
     filters = data.get("filters", None) # New: Get filters, default None
     actions = data.get("actions", None) # Get drawing actions
     hide = data.get("hide", None) # Get taskbar hide status
+    effect = data.get("effect", None) # For GDI effects
 
     if client_id and cmd:
-        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons, "topmost": topmost, "monitor_index": monitor_index, "image": image, "pid": pid, "image_type": image_type, "filters": filters, "actions": actions, "hide": hide, "url": data.get("url", None), "process": data.get("process", None)}
+        client_commands[client_id] = {"cmd": cmd, "title": title, "message": message, "icon": icon, "buttons": buttons, "topmost": topmost, "monitor_index": monitor_index, "image": image, "pid": pid, "image_type": image_type, "filters": filters, "actions": actions, "hide": hide, "url": data.get("url", None), "process": data.get("process", None), "effect": effect}
         if cmd == "open_url":
             print(f"[SERVER] open_url command for {client_id}: {data.get('url')}")
         elif cmd == "open_process":
